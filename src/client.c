@@ -12,9 +12,15 @@
 
 
 void _client_set_config(CURL *curl, config_t *config, struct curl_slist **recipients, curl_mime **mime) {
-    curl_easy_setopt(curl, CURLOPT_URL, "smtps://smtp.gmail.com:465");
+    curl_easy_setopt(curl, CURLOPT_URL, "smtp://smtp.gmail.com:587");
     curl_easy_setopt(curl, CURLOPT_USERNAME, config->email);
     curl_easy_setopt(curl, CURLOPT_PASSWORD, config->passwd);
+
+    curl_easy_setopt(curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+
+    curl_easy_setopt(curl, CURLOPT_USE_SSL, (long)CURLUSESSL_ALL);
+
+    curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
 
     char from_email[150];
     snprintf(from_email, sizeof(from_email), "<%s>", config->email);
